@@ -312,7 +312,7 @@
 #endif
 
 #ifndef configASSERT
-    #define configASSERT( x )
+    #define configASSERT( x )  if( ( x ) == 0 ) vAssertCalled( __FILE__, __LINE__ )
     #define configASSERT_DEFINED    0
 #else
     #define configASSERT_DEFINED    1
