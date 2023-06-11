@@ -1,1 +1,1 @@
-#ifndef
+#include "config.h"
