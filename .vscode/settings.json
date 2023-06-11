@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "queue.h": "c",
+        "freertos.h": "c",
+        "task.h": "c",
+        "cstdlib": "c",
+        "algorithm": "c",
+        "driverlib.h": "c"
+    }
+}

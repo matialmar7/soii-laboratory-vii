@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+#Others
+*.bin
+*.axf
+out.map
+*.map

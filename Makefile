@@ -28,7 +28,7 @@ include makedefs
 RTOS_SOURCE_DIR=./FreeRTOS/Source
 DEMO_SOURCE_DIR=./FreeRTOS/Common/Minimal
 
-CFLAGS+=-Wno-attributes -I hw_include -I . -I ${RTOS_SOURCE_DIR}/include -I${DEMO_SOURCE_DIR}/../include -I ${RTOS_SOURCE_DIR}/portable/GCC/ARM_CM3 -I ../Common/include -D GCC_ARMCM3_LM3S102 -D inline=
+CFLAGS+= -Wno-attributes -I hw_include -I . -I ${RTOS_SOURCE_DIR}/include -I${DEMO_SOURCE_DIR}/../include -I ${RTOS_SOURCE_DIR}/portable/GCC/ARM_CM3 -I ../Common/include -D GCC_ARMCM3_LM3S102 -D inline=
 
 VPATH=${RTOS_SOURCE_DIR}:${RTOS_SOURCE_DIR}/portable/MemMang:${RTOS_SOURCE_DIR}/portable/GCC/ARM_CM3:${DEMO_SOURCE_DIR}:init:hw_include
 
@@ -42,6 +42,8 @@ OBJS=${COMPILER}/main.o	\
 	  ${COMPILER}/PollQ.o	\
 	  ${COMPILER}/integer.o	\
 	  ${COMPILER}/semtest.o \
+	  ${COMPILER}/mytasks.o \
+	  ${COMPILER}/config.o \
 	  ${COMPILER}/osram96x16.o
 
 INIT_OBJS= ${COMPILER}/startup.o
@@ -53,14 +55,14 @@ LIBS= hw_include/libdriver.a
 # The default rule, which causes init to be built.
 #
 all: ${COMPILER}           \
-     ${COMPILER}/RTOSDemo.axf \
+     ${COMPILER}/TP7.axf \
 	 
 #
 # The rule to clean out all the build products
 #
 
 clean:
-	@rm -rf ${COMPILER} ${wildcard *.bin} RTOSDemo.axf
+	@rm -rf ${COMPILER} ${wildcard *.bin} TP7.axf
 	
 #
 # The rule to create the target directory
@@ -68,9 +70,9 @@ clean:
 ${COMPILER}:
 	@mkdir ${COMPILER}
 
-${COMPILER}/RTOSDemo.axf: ${INIT_OBJS} ${OBJS} ${LIBS}
-SCATTER_RTOSDemo=standalone.ld
-ENTRY_RTOSDemo=ResetISR
+${COMPILER}/TP7.axf: ${INIT_OBJS} ${OBJS} ${LIBS}
+SCATTER_TP7=standalone.ld
+ENTRY_TP7=ResetISR
 
 #
 #

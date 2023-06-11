@@ -36,6 +36,7 @@ static void FaultISR(void);
 static void IntDefaultHandler(void);
 extern void xPortPendSVHandler(void);
 extern void xPortSysTickHandler(void);
+//Commented for now until GPIO and UART are enabled
 extern void vUART_ISR( void );
 extern void vGPIO_ISR( void );
 extern void vPortSVCHandler( void );
