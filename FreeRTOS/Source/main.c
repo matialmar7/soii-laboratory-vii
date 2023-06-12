@@ -5,5 +5,8 @@
 int main(void)
 {
     init();
+
+    //Start RTOS scheduler
+    vTaskStartScheduler(); //https://www.freertos.org/a00132.html 
     return 0;
 }

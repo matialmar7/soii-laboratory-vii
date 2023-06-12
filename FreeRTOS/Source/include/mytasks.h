@@ -11,7 +11,7 @@ void xTaskTemperatureSensor( void *pvParameters );  //pvParameters is a value th
                                                     //the created task executes - so it is not valid to pass the address of a stack variable.
 
 /**
- * @brief Reads temperature sensor queue and pass a low pass filter into it
+ * @brief Reads temperature sensor queue and pass a filter to it
 */
 void xTaskFilter( void *pvParameters );
 

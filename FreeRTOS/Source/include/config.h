@@ -6,6 +6,11 @@
 /* Environment includes. */
 #include "DriverLib.h"
 
+/* UART configuration - note this does not use the FIFO so is not very
+efficient. */
+#define mainBAUD_RATE				( 19200 )
+#define mainFIFO_SET				( 0x10 )
+
 uint8_t init(void);
 
 //From RTOS Demo
