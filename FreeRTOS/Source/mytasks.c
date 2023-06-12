@@ -45,7 +45,10 @@ void xTaskFilter( void *pvParameters )
         mean = sum / N_UART;
 
         xQueueSend(xDisplayQueue, &mean, portMAX_DELAY);
+
+        vTaskDelay(pdMS_TO_TICKS(100));
     }
 
     #undef N_MAX
+    vTaskDelete( NULL );
 }
