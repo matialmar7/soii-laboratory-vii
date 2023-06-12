@@ -1,5 +1,7 @@
 #include "config.h"
 
+#include "mytasks.h"
+
 __UINT8_TYPE__ init(void)
 {
     //Initialize hardware
@@ -8,6 +10,10 @@ __UINT8_TYPE__ init(void)
     xTempQueue = xQueueCreate(QUEUE_SIZE, sizeof(uint8_t));
     xUARTQueue = xQueueCreate(QUEUE_SIZE, sizeof(uint8_t));
     xDisplayQueue = xQueueCreate(QUEUE_SIZE, sizeof(uint8_t));
+
+    xTaskCreate(xTaskTemperatureSensor, "GetTemp", configMINIMAL_STACK_SIZE, NULL, mainTASK_PRIORITY, NULL);    //Tarea que se envarca de generar un valor aleatorio entre 1 a 30 grados
+    xTaskCreate(xTaskFilter, "Filter", configMINIMAL_STACK_SIZE, NULL, mainTASK_PRIORITY, NULL);    //Tarea que se encargar de ser el filtro con un coficiente entre 0 a 20 y N default 10
+    
 }
 
 /**
@@ -55,29 +61,22 @@ static void prvSetupHardware(void)
 
 void vUART_ISR(void)
 {
-    //
-    //unsigned long ulStatus;
+    
+    unsigned long ulStatus;
+    uint8_t value;
 
-	///* What caused the interrupt. */
-	//ulStatus = UARTIntStatus( UART0_BASE, pdTRUE );
+	/* What caused the interrupt. */
+	ulStatus = UARTIntStatus( UART0_BASE, pdTRUE );
+	/* Clear the interrupt. */
+	UARTIntClear( UART0_BASE, ulStatus );
 
-	///* Clear the interrupt. */
-	//UARTIntClear( UART0_BASE, ulStatus );
-
-	///* Was a Tx interrupt pending? */
-	//if( ulStatus & UART_INT_TX )
-	//{
-	//	/* Send the next character in the string.  We are not using the FIFO. */
-	//	if( *pcNextChar != 0 )
-	//	{
-	//		if( !( HWREG( UART0_BASE + UART_O_FR ) & UART_FR_TXFF ) )
-	//		{
-	//			HWREG( UART0_BASE + UART_O_DR ) = *pcNextChar;
-	//		}
-	//		pcNextChar++;
-	//	}
-	//}
-    //
+	/* Was a Tx interrupt pending? */
+	if( ulStatus & UART_INT_TX )
+	{
+        value = (uint8_t)UARTCharGet(UART0_BASE);
+        xQueueSendFromISR(xUARTQueue, &value, 0);
+	}
+    
 }
 /*-----------------------------------------------------------*/
 

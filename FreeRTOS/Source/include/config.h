@@ -11,6 +11,9 @@ efficient. */
 #define mainBAUD_RATE				( 19200 )
 #define mainFIFO_SET				( 0x10 )
 
+//Task priorities
+#define mainTASK_PRIORITY (tskIDLE_PRIORITY + 2)
+
 uint8_t init(void);
 
 //From RTOS Demo
