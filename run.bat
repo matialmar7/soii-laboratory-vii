@@ -1,0 +1,1 @@
+& 'C:\Program Files\qemu\qemu-system-arm.exe' -serial stdio -machine lm3s811evb -kernel 'gcc\TP7.axf'

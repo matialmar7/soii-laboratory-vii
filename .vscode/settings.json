@@ -5,6 +5,9 @@
         "task.h": "c",
         "cstdlib": "c",
         "algorithm": "c",
-        "driverlib.h": "c"
+        "driverlib.h": "c",
+        "config.h": "c",
+        "common.h": "c",
+        "hw_adc.h": "c"
     }
 }

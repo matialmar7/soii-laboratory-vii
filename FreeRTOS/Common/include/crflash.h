@@ -19,17 +19,28 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * https://www.FreeRTOS.org
- * https://github.com/FreeRTOS
+ * http://www.FreeRTOS.org
+ * http://aws.amazon.com/freertos
  *
+ * 1 tab == 4 spaces!
  */
 
-#ifndef TIMER_DEMO_H
-#define TIMER_DEMO_H
+#ifndef CRFLASH_LED_H
+#define CRFLASH_LED_H
 
-void vStartTimerDemoTask( TickType_t xBaseFrequencyIn );
-BaseType_t xAreTimerDemoTasksStillRunning( TickType_t xCycleFrequency );
-void vTimerPeriodicISRTests( void );
-void vTimerDemoIncludeBacklogTests( BaseType_t includeBacklogTests );
+/*
+ * Create the co-routines used to flash the LED's at different rates.
+ *
+ * @param uxPriority The number of 'fixed delay' co-routines to create.  This
+ *		  also effects the number of LED's that will be utilised.  For example,
+ *		  passing in 3 will cause LED's 0 to 2 to be utilised.
+ */
+void vStartFlashCoRoutines( UBaseType_t uxPriority );
 
-#endif /* TIMER_DEMO_H */
+/*
+ * Return pdPASS or pdFAIL depending on whether an error has been detected
+ * or not.
+ */
+BaseType_t xAreFlashCoRoutinesStillRunning( void );
+
+#endif

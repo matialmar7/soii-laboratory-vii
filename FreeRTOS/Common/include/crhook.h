@@ -19,17 +19,24 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * https://www.FreeRTOS.org
- * https://github.com/FreeRTOS
+ * http://www.FreeRTOS.org
+ * http://aws.amazon.com/freertos
  *
+ * 1 tab == 4 spaces!
  */
 
-#ifndef TIMER_DEMO_H
-#define TIMER_DEMO_H
+#ifndef CRHOOK_H
+#define CRHOOK_H
 
-void vStartTimerDemoTask( TickType_t xBaseFrequencyIn );
-BaseType_t xAreTimerDemoTasksStillRunning( TickType_t xCycleFrequency );
-void vTimerPeriodicISRTests( void );
-void vTimerDemoIncludeBacklogTests( BaseType_t includeBacklogTests );
+/*
+ * Create the co-routines used to communicate wit the tick hook.
+ */
+void vStartHookCoRoutines( void );
 
-#endif /* TIMER_DEMO_H */
+/*
+ * Return pdPASS or pdFAIL depending on whether an error has been detected
+ * or not.
+ */
+BaseType_t xAreHookCoRoutinesStillRunning( void );
+
+#endif

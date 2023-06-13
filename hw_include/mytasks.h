@@ -3,6 +3,10 @@
 
 #include "common.h"
 
+/*------------------------------------------------------------------------------*/
+/*                                  TASKS                                       */
+/*------------------------------------------------------------------------------*/
+
 /**
  * @brief Emulates temperature sensor readings and enqueue them into a system queue
 */
@@ -14,5 +18,17 @@ void xTaskTemperatureSensor( void *pvParameters );  //pvParameters is a value th
  * @brief Reads temperature sensor queue and pass a filter to it
 */
 void xTaskFilter( void *pvParameters );
+
+/**
+ * @brief Displays the temperature thru time
+*/
+void xTaskDisplay( void *pvParameters );
+
+
+/*------------------------------------------------------------------------------*/
+/*                              GRAPH FUNCTIONS                                 */
+/*------------------------------------------------------------------------------*/
+
+void plot(uint8_t * image, uint8_t value);
 
 #endif // __MYTASKS_H__

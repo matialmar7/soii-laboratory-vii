@@ -1,6 +1,7 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
+#include "DriverLib.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"

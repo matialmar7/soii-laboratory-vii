@@ -1,5 +1,4 @@
 #include "config.h"
-
 #include "mytasks.h"
 
 __UINT8_TYPE__ init(void)
@@ -11,8 +10,9 @@ __UINT8_TYPE__ init(void)
     xUARTQueue = xQueueCreate(QUEUE_SIZE, sizeof(uint8_t));
     xDisplayQueue = xQueueCreate(QUEUE_SIZE, sizeof(uint8_t));
 
-    xTaskCreate(xTaskTemperatureSensor, "GetTemp", configMINIMAL_STACK_SIZE, NULL, mainTASK_PRIORITY, NULL);    //Tarea que se envarca de generar un valor aleatorio entre 1 a 30 grados
-    xTaskCreate(xTaskFilter, "Filter", configMINIMAL_STACK_SIZE, NULL, mainTASK_PRIORITY, NULL);    //Tarea que se encargar de ser el filtro con un coficiente entre 0 a 20 y N default 10
+    xTaskCreate(xTaskTemperatureSensor, "GetTemp", configMINIMAL_STACK_SIZE, NULL, mainTASK_PRIORITY, NULL);
+    xTaskCreate(xTaskFilter, "Filter", configMINIMAL_STACK_SIZE, NULL, mainTASK_PRIORITY, NULL);   
+    xTaskCreate(xTaskDisplay, "Display", 100, NULL, mainTASK_PRIORITY, NULL);    
     
 }
 
@@ -24,15 +24,6 @@ static void prvSetupHardware(void)
     /* Setup the PLL. */
     SysCtlClockSet(SYSCTL_SYSDIV_10 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN | SYSCTL_XTAL_6MHZ);
 
-    /* Setup the push button. */
-    /*
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
-    GPIODirModeSet(GPIO_PORTC_BASE, mainPUSH_BUTTON, GPIO_DIR_MODE_IN);
-    GPIOIntTypeSet(GPIO_PORTC_BASE, mainPUSH_BUTTON, GPIO_FALLING_EDGE);
-    IntPrioritySet(INT_GPIOC, configKERNEL_INTERRUPT_PRIORITY);
-    GPIOPinIntEnable(GPIO_PORTC_BASE, mainPUSH_BUTTON);
-    IntEnable(INT_GPIOC);
-    */
     /* Enable the UART.  */
     SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
@@ -46,7 +37,7 @@ static void prvSetupHardware(void)
 
     /* We don't want to use the fifo.  This is for test purposes to generate
     as many interrupts as possible. */
-    //HWREG(UART0_BASE + UART_O_LCR_H) &= ~mainFIFO_SET;
+    HWREG(UART0_BASE + UART_O_LCR_H) &= ~mainFIFO_SET;
 
     /* Enable Tx interrupts. */
     HWREG(UART0_BASE + UART_O_IM) |= UART_INT_RX;
@@ -77,19 +68,5 @@ void vUART_ISR(void)
         xQueueSendFromISR(xUARTQueue, &value, 0);
 	}
     
-}
-/*-----------------------------------------------------------*/
-
-void vGPIO_ISR( void )
-{
-portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
-
-	/* Clear the interrupt. */
-	//GPIOPinIntClear(GPIO_PORTC_BASE, mainPUSH_BUTTON);
-
-	/* Wake the button handler task. */
-	//xSemaphoreGiveFromISR( xButtonSemaphore, &xHigherPriorityTaskWoken );
-
-	portEND_SWITCHING_ISR( xHigherPriorityTaskWoken );
 }
 /*-----------------------------------------------------------*/
