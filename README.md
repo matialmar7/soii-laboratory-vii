@@ -5,21 +5,34 @@ This is the implementation of the [Free RTOS](./README.old.md) assignment from t
 # How to use it
 
 ## Requirements
-    * Ubuntu 20.04 or docker for compiling
-    * Build-essentials
-    * Qemu
+    [*] Ubuntu 20.04 or docker for compiling
+    [*] Build-essentials
+    [*] Qemu
 
 ## Compiling the binaries
-    Run the docker in the docker folder and use ´make´ to compile the binaries
+### Build
+Use `docker build -t ubuntu -f Dockerfile .` to build the docker image
+
+Run the docker using the `start_docker.sh <project_path>` in the docker folder and use ´make´ to compile the binaries
 ## Excecution
 
 ### On windows
-    & 'C:\Program Files\qemu\qemu-system-arm.exe' -serial stdio -machine lm3s811evb -kernel 'gcc\TP7.axf'
-
+```powershell
+& 'C:\Program Files\qemu\qemu-system-arm.exe' -serial stdio -machine lm3s811evb -kernel 'gcc\TP7.axf'
+```
 ### On linux
-    qemu-system-arm -serial stdio -machine lm3s811evb -kernel gcc/TP7.axf
+```bash
+qemu-system-arm -serial stdio -machine lm3s811evb -kernel gcc/TP7.axf
+```
 
 # Development
 
 ## Tasks
 
+Se crearon 4 tareas, cada una encargada de una funcion especifica.
+```c
+void xTaskTemperatureSensor( void *pvParameters );
+void xTaskFilter( void *pvParameters );
+void xTaskDisplay( void *pvParameters );
+void xTaskTop( void *pvParameters );
+```
