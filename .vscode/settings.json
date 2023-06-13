@@ -8,6 +8,8 @@
         "driverlib.h": "c",
         "config.h": "c",
         "common.h": "c",
-        "hw_adc.h": "c"
+        "hw_adc.h": "c",
+        "rand.h": "c",
+        "stdlib.h": "c"
     }
 }

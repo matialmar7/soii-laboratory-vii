@@ -10,9 +10,10 @@ __UINT8_TYPE__ init(void)
     xUARTQueue = xQueueCreate(QUEUE_SIZE, sizeof(uint8_t));
     xDisplayQueue = xQueueCreate(QUEUE_SIZE, sizeof(uint8_t));
 
-    xTaskCreate(xTaskTemperatureSensor, "GetTemp", configMINIMAL_STACK_SIZE, NULL, mainTASK_PRIORITY, NULL);
-    xTaskCreate(xTaskFilter, "Filter", configMINIMAL_STACK_SIZE, NULL, mainTASK_PRIORITY, NULL);   
+    xTaskCreate(xTaskTemperatureSensor, "GetTemp", 40, NULL, mainTASK_PRIORITY, NULL);
+    xTaskCreate(xTaskFilter, "Filter", 60, NULL, mainTASK_PRIORITY, NULL);   
     xTaskCreate(xTaskDisplay, "Display", 100, NULL, mainTASK_PRIORITY, NULL);    
+    xTaskCreate(xTaskTop, "Top", 60, NULL, mainTASK_PRIORITY, NULL);    
     
 }
 

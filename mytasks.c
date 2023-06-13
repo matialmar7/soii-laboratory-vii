@@ -3,23 +3,14 @@
 
 void xTaskTemperatureSensor( void *pvParameters )
 {
-    /* Calculo de stack
-    temp = 1
-    for  = 4
-    xQueSnd = 4
-    xTskDel = 4
-    xTskDlt = 4
-    -----------
-    Total = 17
-    */
-    uint8_t temp = 0;
-
+    uint8_t temperatura = 0;
+    uint8_t temperatura_base = 15;
     for(;;)
     {
-        temp = (uint8_t)(rand() % 40) + 1;
+        temperatura = (uint8_t)(rand() % 15) + temperatura_base;
 
         //Enqueue
-        xQueueSend(xTempQueue, &temp, portMAX_DELAY);
+        xQueueSend(xTempQueue, &temperatura, portMAX_DELAY);
 
         vTaskDelay(pdMS_TO_TICKS(100));
     }
@@ -29,47 +20,31 @@ void xTaskTemperatureSensor( void *pvParameters )
 
 void xTaskFilter( void *pvParameters )
 {
-    /* Calculo de stack
-    temp_in_second   = N_MAX
-    N_UART           = 1
-    last_temp        = 1
-    sum              = 1
-    mean             = 1
-    i                = 1
-    xQueueRcv        = 4
-    xQueueRcv        = 4
-    xQueueSnd        = 4
-    vTaskDelay       = 4
-    vTaskDelete      = 4
-    for loop         = 4
-    -------------------------
-    Total:          49
-    */
-
-
     #define N_MAX 20
 
     uint8_t temp_in_second[N_MAX] = {0};
-    uint8_t N_UART = N_MAX;
+    uint8_t N_FIL = N_MAX;
+    uint8_t N_UART = 0;
     uint8_t last_temp = 0;
-    uint8_t sum = 0;
-    uint8_t mean = 0;
-    uint8_t i = 0;
+
     for(;;)
     {
         xQueueReceive(xTempQueue, &last_temp, portMAX_DELAY);
         xQueueReceive(xUARTQueue, &N_UART, 0);                      // Check UART N Value
         //Check N_UART <= N_MAX
-        if (N_UART < N_MAX) 
-            N_UART = N_MAX;
+        if (N_UART > 0 && N_UART < N_MAX) 
+            N_FIL = N_UART;
 
         //Push into queue
-        for(int i=(N_UART-1); i>0; i--){temp_in_second[i] = temp_in_second[i-1];} //This could be replaced with a bitwise operation.
+        for(uint8_t i=(N_FIL-1); i>0; i--)
+            temp_in_second[i] = temp_in_second[i-1]; //This could be replaced with a bitwise operation.
         temp_in_second[0] = last_temp;
 
         //Calculate mean
-        for(int j = 0; j < N_UART; j++){ sum = temp_in_second[j]; }
-        mean = sum / N_UART;
+        uint16_t sum = 0;
+        for (uint8_t i = 0; i < N_FIL; i++)
+            sum += temp_in_second[i];
+        uint8_t mean = sum / N_FIL;
 
         xQueueSend(xDisplayQueue, &mean, portMAX_DELAY);
 
@@ -95,15 +70,23 @@ void xTaskDisplay( void *pvParameters )
         xQueueReceive(xDisplayQueue, &temp, portMAX_DELAY);
 
         plot(graph, temp);
-        OSRAMImageDraw(graph, 26, 0, 96, 2);
-        OSRAMStringDraw("40", 12, 0);
-        OSRAMStringDraw(" 0", 12, 1);
-        OSRAMStringDraw("t", 90, 1);
+        OSRAMImageDraw(graph, 15, 0, 96, 2);
+        OSRAMStringDraw(intToStr(temp,10), 84, 2);
+        OSRAMStringDraw("t", 10, 1);
     }
     vTaskDelete( NULL );
 }
 
-
+void xTaskTop( void *pvParameters )
+{
+    char data[400] = {0};    // Varaible que almacena la data para enviar 
+    
+    for (;;)
+    {
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    }
+    vTaskDelete( NULL );
+}
 
 /*------------------------------------------------------------------------------*/
 /*                              GRAPH FUNCTIONS                                 */
@@ -111,45 +94,51 @@ void xTaskDisplay( void *pvParameters )
 
 void plot(uint8_t * image, uint8_t value)
 {
-    int i;
-    // dibujo la linea del eje Y mediante 255 = 11111111
-    image[0] = 255;
-    image[96] = 255; // eje y
-    /*
-    //ESTA PRIMERA PARTE CORRESPONDE A LOS VALORES de 1 a 16 SEGUNDA FILA DEL DiSPLAY
-    if (value < 16)
-    {
-        
-        //CON EL SIGUIENTE FOR MUEVO TODOS LOS VALORES de izquierda a la derecha para poner el valor nuevo
-        for (i = 191; i > 97; i--)
-        {
-            image[i] = (image[i - 1]);
-        }
-        image[97] = ((0b10000000 >> (int)(value / 2)) |0b10000000); //primer pixel de la segunda fila
+    uint8_t new_value = 0;
 
-        for (i = 95; i > 1; i--)
-        {
-            image[i] = image[i - 1];
-        }
-        image[1] = 0b00000000;
-    }
-    //SEGUNDA CORRESPONDE A LOS VALORES de 1 a 16 SEGUNDA FILA DEL DiSPLAY
-    else
+    if (value < 16) //Primera fila
     {
-        //CON EL SIGUIENTE FOR MUEVO TODOS LOS VALORES de izquierda a la derecha para poner el valor nuevo
-        for (i = 95; i > 1; i--)
-        {
-            image[i] = image[i - 1];
-        }
-        image[1] = (0b10000000 >> (int)((value - 16) / 2)) ;
-        
-        for (i = 191; i > 97; i--)
-        {
-            image[i] = (image[i - 1] );
-        }
-        image[97] = 0b10000000;
-        
+      image[1] = 0b00000000;
+      new_value = ((0b10000000 >> (int)(value / 2)) |0b10000000);
     }
-    */
+    else //Segunda fila
+    {
+      image[1] = (0b10000000 >> (int)((value - 16) / 2)) ;
+      new_value = 0b10000000;
+    }
+
+    //Actualizar los valores
+    for (int i = 191; i > 1; i--) 
+        if( i == 97)
+            image[i] = new_value; //primer pixel de la segunda fila
+        else 
+            image[i] = (image[i - 1]);
+
     return;
+}
+
+/*------------------------------------------------------------------------------*/
+/*                              UTILS FUNCTIONS                                 */
+/*------------------------------------------------------------------------------*/
+
+//Similar to itoa from stdlib
+char *intToStr(int val, int base)
+{
+
+    static char buf[32] = {0};
+
+    int i = 30;
+
+    for (; val && i; --i, val /= base)
+
+        buf[i] = "0123456789abcdef"[val % base];
+
+    return &buf[i + 1];
+}
+
+void print(const char *msg)
+{
+    do{
+        UARTCharPut(UART0_BASE, *msg);
+    }while (*(msg++) != 0x00);
 }

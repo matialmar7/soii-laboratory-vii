@@ -24,6 +24,11 @@ void xTaskFilter( void *pvParameters );
 */
 void xTaskDisplay( void *pvParameters );
 
+/**
+ * @brief Displays the process and cpu information
+*/
+void xTaskTop( void *pvParameters );
+
 
 /*------------------------------------------------------------------------------*/
 /*                              GRAPH FUNCTIONS                                 */
@@ -31,4 +36,27 @@ void xTaskDisplay( void *pvParameters );
 
 void plot(uint8_t * image, uint8_t value);
 
+
+/*------------------------------------------------------------------------------*/
+/*                              UTILS FUNCTIONS                                 */
+/*------------------------------------------------------------------------------*/
+/**
+ * @brief Funcion para transformar numero a char y que se muestre en la pantalla
+ * 
+ * @param value 
+ * @param ptr 
+ * @param base 
+ * @return char* 
+ */
+char *intToStr(int val, int base);
+
+/**
+ * @brief Funcion que envia la data por uart
+ * 
+ * @param msg 
+ */
+void print(const char *msg);
+
 #endif // __MYTASKS_H__
+
+
