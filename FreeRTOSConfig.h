@@ -47,11 +47,13 @@
 #define configMINIMAL_STACK_SIZE	( ( unsigned short ) 70 )
 #define configTOTAL_HEAP_SIZE		( ( size_t ) ( 7000 ) )
 #define configMAX_TASK_NAME_LEN		( 10 )
-#define configUSE_TRACE_FACILITY	0
+#define configUSE_TRACE_FACILITY	1
 #define configUSE_16_BIT_TICKS		0
 #define configIDLE_SHOULD_YIELD		0
+#define configUSE_CO_ROUTINES 0
 
 #define configMAX_PRIORITIES		( 5 )
+#define configMAX_CO_ROUTINE_PRIORITIES (2)
 
 /* Set the following definitions to 1 to include the API function, or zero
 to exclude the API function. */
@@ -60,7 +62,7 @@ to exclude the API function. */
 #define INCLUDE_uxTaskPriorityGet		0
 #define INCLUDE_vTaskDelete				0
 #define INCLUDE_vTaskCleanUpResources	0
-#define INCLUDE_vTaskSuspend			0
+#define INCLUDE_vTaskSuspend			1
 #define INCLUDE_vTaskDelayUntil			1
 #define INCLUDE_vTaskDelay				1
 
@@ -69,6 +71,19 @@ to exclude the API function. */
 See http://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html. */
 #define configMAX_SYSCALL_INTERRUPT_PRIORITY 	191 /* equivalent to 0xa0, or priority 5. */
 
-
+/*
+// Para estadisticas
+#define configGENERATE_RUN_TIME_STATS 1
+#define configSUPPORT_DYNAMIC_ALLOCATION 1
+#define INCLUDE_uxTaskGetStackHighWaterMark 1
+extern volatile unsigned long ulHighFrequencyTimerTicks;
+*/
+/* ulHighFrequencyTimerTicks is already being incremented at 20KHz.  Just set
+its value back to 0. 
+*/
+/*
+#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() (ulHighFrequencyTimerTicks = 0UL)
+#define portGET_RUN_TIME_COUNTER_VALUE() ulHighFrequencyTimerTicks
+*/
 
 #endif /* FREERTOS_CONFIG_H */
