@@ -1,10 +1,19 @@
 #include "config.h"
 #include "mytasks.h"
 
-__UINT8_TYPE__ init(void)
+/* Stores the value of the maximum recorded jitter between interrupts. */
+volatile unsigned long ulMaxJitter = 0UL;
+
+/* Counts the total number of times that the high frequency timer has 'ticked'.
+This value is used by the run time stats function to work out what percentage
+of CPU time each task is taking. */
+volatile unsigned long ulHighFrequencyTimerTicks = 0UL;
+
+uint8_t init(void)
 {
     //Initialize hardware
     prvSetupHardware();
+    vSetupHighFrequencyTimer();
 
     xTempQueue = xQueueCreate(QUEUE_SIZE, sizeof(uint8_t));
     xUARTQueue = xQueueCreate(QUEUE_SIZE, sizeof(uint8_t));
@@ -14,7 +23,7 @@ __UINT8_TYPE__ init(void)
     xTaskCreate(xTaskFilter, "Filter", 60, NULL, mainTASK_PRIORITY, NULL);   
     xTaskCreate(xTaskDisplay, "Display", 100, NULL, mainTASK_PRIORITY, NULL);    
     xTaskCreate(xTaskTop, "Top", 60, NULL, mainTASK_PRIORITY, NULL);    
-    
+    return 0;    
 }
 
 /**
@@ -49,6 +58,42 @@ static void prvSetupHardware(void)
     OSRAMInit(true);
 }
 
+/**
+ * @brief This is from FreeRTOS Demo CORTEX_LM3SXXX timertest.c 
+*/
+void vSetupHighFrequencyTimer(void)
+{
+    unsigned long ulFrequency;
+
+    //Como dice la docu inicilizo el timer 0 para generar interruciones y el timmer 1 es para el jitter
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1);
+    
+    /*8.4 Initialization and Configuration from Documentation*/
+    TimerConfigure(TIMER0_BASE, TIMER_CFG_32_BIT_PER);
+    TimerConfigure(TIMER1_BASE, TIMER_CFG_32_BIT_PER);
+
+    // Le pongo la prioridad al timer cero como ALTA
+    IntPrioritySet(INT_TIMER0A, timerHIGHEST_PRIORITY);
+
+    /* Just used to measure time. */
+    TimerLoadSet(TIMER1_BASE, TIMER_A, timerMAX_32BIT_VALUE);
+
+    /* Me aseguro que la interrucion no salte mientras esta ejecutando la tarea*/
+    portDISABLE_INTERRUPTS();
+
+    /* la taza con la cual salta la interruocion */
+    ulFrequency = configCPU_CLOCK_HZ / timerINTERRUPT_FREQUENCY;
+    TimerLoadSet(TIMER0_BASE, TIMER_A, ulFrequency);
+    IntEnable(INT_TIMER0A);
+    //Habilito la interrupcion por timer0
+    TimerIntEnable(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
+
+    /* Enable both timers. */
+    TimerEnable(TIMER0_BASE, TIMER_A);
+}
+
+
 /*-----------------------------------------------------------*/
 
 void vUART_ISR(void)
@@ -69,5 +114,42 @@ void vUART_ISR(void)
         xQueueSendFromISR(xUARTQueue, &value, 0);
 	}
     
+}
+
+/**
+ * @brief Handler del timer
+ * From Cortex_LM3SXXX Demo
+ */
+void Timer0IntHandler(void)
+{
+    unsigned long ulDifference;
+    volatile unsigned long ulCurrentCount;
+    static unsigned long ulMaxDifference = 0, ulLastCount = 0;
+
+    /* We use the timer 1 counter value to measure the clock cycles between
+    the timer 0 interrupts. */
+    ulCurrentCount = timerTIMER_1_COUNT_VALUE;
+
+    TimerIntClear(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
+
+    if (ulCurrentCount < ulLastCount)
+    {
+        /* How many times has timer 1 counted since the last interrupt? */
+        ulDifference = ulLastCount - ulCurrentCount;
+
+        /* Is this the largest difference we have measured yet? */
+        if (ulDifference > ulMaxDifference)
+        {
+            ulMaxDifference = ulDifference;
+            ulMaxJitter = ulMaxDifference - timerEXPECTED_DIFFERENCE_VALUE;
+        }
+    }
+
+    ulLastCount = ulCurrentCount;
+
+    /* Keep a count of the total number of 20KHz ticks.  This is used by the
+    run time stats functionality to calculate how much CPU time is used by
+    each task. */
+    ulHighFrequencyTimerTicks++;
 }
 /*-----------------------------------------------------------*/

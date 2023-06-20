@@ -71,19 +71,18 @@ to exclude the API function. */
 See http://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html. */
 #define configMAX_SYSCALL_INTERRUPT_PRIORITY 	191 /* equivalent to 0xa0, or priority 5. */
 
-/*
-// Para estadisticas
+
+// Para estadisticas segun https://www.freertos.org/rtos-run-time-stats.html
+
 #define configGENERATE_RUN_TIME_STATS 1
 #define configSUPPORT_DYNAMIC_ALLOCATION 1
 #define INCLUDE_uxTaskGetStackHighWaterMark 1
 extern volatile unsigned long ulHighFrequencyTimerTicks;
-*/
+
 /* ulHighFrequencyTimerTicks is already being incremented at 20KHz.  Just set
-its value back to 0. 
-*/
-/*
+its value back to 0. */
+
 #define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() (ulHighFrequencyTimerTicks = 0UL)
 #define portGET_RUN_TIME_COUNTER_VALUE() ulHighFrequencyTimerTicks
-*/
 
 #endif /* FREERTOS_CONFIG_H */
