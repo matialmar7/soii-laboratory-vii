@@ -3,6 +3,5 @@ docker run -dti --rm --privileged \
     --network host \
     --env "TERM=xterm-256color" \
     --name "so2-dev"\
-    --volume $2:/home/so:rw \
-    -w "/home/so" \
-    ubuntu bash
+    --volume "C:\Users\matia\Desktop\SO2\TP7":"/home/so":rw \
+   ubuntu bash
