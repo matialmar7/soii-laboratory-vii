@@ -1,5 +1,6 @@
 #include "mytasks.h"
 #include "rand.h"
+#include "stats.h"
 
 void xTaskTemperatureSensor( void *pvParameters )
 {
@@ -71,7 +72,7 @@ void xTaskDisplay( void *pvParameters )
 
         plot(graph, temp);
         OSRAMImageDraw(graph, 15, 0, 96, 2);
-        OSRAMStringDraw(intToStr(temp,10), 84, 2);
+        OSRAMStringDraw(itoa(temp,10), 84, 2);
         OSRAMStringDraw("t", 10, 1);
     }
     vTaskDelete( NULL );
@@ -79,12 +80,21 @@ void xTaskDisplay( void *pvParameters )
 
 void xTaskTop( void *pvParameters )
 {
-    char data[400] = {0};    // Varaible que almacena la data para enviar 
-    
+    size_t size = 400;
+    char *data = pvPortMalloc(size);  // Variable que almacena la data para enviar 
+
     for (;;)
     {
+        print("\e[1;1H\e[2J");  // clear console
+        print(header);
+        print(divider);
+        print("\n");
+        getRunTimeStats(data);
+        print(data);
+
         vTaskDelay(pdMS_TO_TICKS(1000));
     }
+    vPortFree(data);
     vTaskDelete( NULL );
 }
 
@@ -115,30 +125,4 @@ void plot(uint8_t * image, uint8_t value)
             image[i] = (image[i - 1]);
 
     return;
-}
-
-/*------------------------------------------------------------------------------*/
-/*                              UTILS FUNCTIONS                                 */
-/*------------------------------------------------------------------------------*/
-
-//Similar to itoa from stdlib
-char *intToStr(int val, int base)
-{
-
-    static char buf[32] = {0};
-
-    int i = 30;
-
-    for (; val && i; --i, val /= base)
-
-        buf[i] = "0123456789abcdef"[val % base];
-
-    return &buf[i + 1];
-}
-
-void print(const char *msg)
-{
-    do{
-        UARTCharPut(UART0_BASE, *msg);
-    }while (*(msg++) != 0x00);
 }

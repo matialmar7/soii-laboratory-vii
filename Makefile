@@ -47,6 +47,7 @@ OBJS=${COMPILER}/main.o	\
 	  ${COMPILER}/osram96x16.o \
 	  ${COMPILER}/rand.o \
 	  ${COMPILER}/mytasks.o  \
+	  ${COMPILER}/stats.o  \
 	  ${COMPILER}/config.o 
 	  
 	  
