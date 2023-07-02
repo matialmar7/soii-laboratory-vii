@@ -4,8 +4,15 @@
 
 void xTaskTemperatureSensor( void *pvParameters )
 {
+    #ifdef STACK_CALCULATION
+        UBaseType_t uxHighWaterMark;
+        uxHighWaterMark = uxTaskGetStackHighWaterMark( NULL );
+        char *buf = pvPortMalloc(10*sizeof(char));
+    #endif
+
     uint8_t temperatura = 0;
     uint8_t temperatura_base = 15;
+
     for(;;)
     {
         temperatura = (uint8_t)(rand() % 15) + temperatura_base;
@@ -13,15 +20,29 @@ void xTaskTemperatureSensor( void *pvParameters )
         //Enqueue
         xQueueSend(xTempQueue, &temperatura, portMAX_DELAY);
 
+        #ifdef STACK_CALCULATION
+            uxHighWaterMark = uxTaskGetStackHighWaterMark( NULL );
+            print("Temp: ");
+            print(ltoc(uxHighWaterMark,buf,10));
+            print("\n");
+        #endif
+
         vTaskDelay(pdMS_TO_TICKS(100));
     }
-
+    #ifdef STACK_CALCULATION
+        vPortFree(buf);
+    #endif
     vTaskDelete( NULL );
 }
 
 void xTaskFilter( void *pvParameters )
 {
     #define N_MAX 20
+    #ifdef STACK_CALCULATION
+        UBaseType_t uxHighWaterMark;
+        uxHighWaterMark = uxTaskGetStackHighWaterMark( NULL );
+        char *buf = pvPortMalloc(10*sizeof(char));
+    #endif
 
     uint8_t temp_in_second[N_MAX] = {0};
     uint8_t N_FIL = N_MAX;
@@ -49,9 +70,18 @@ void xTaskFilter( void *pvParameters )
 
         xQueueSend(xDisplayQueue, &mean, portMAX_DELAY);
 
+        #ifdef STACK_CALCULATION
+            uxHighWaterMark = uxTaskGetStackHighWaterMark( NULL );
+            print("Filter: ");
+            print(ltoc(uxHighWaterMark,buf,10));
+            print("\n");
+        #endif
+
         vTaskDelay(pdMS_TO_TICKS(100));
     }
-
+    #ifdef STACK_CALCULATION
+        vPortFree(buf);
+    #endif
     #undef N_MAX
     vTaskDelete( NULL );
 }
@@ -62,6 +92,13 @@ void xTaskDisplay( void *pvParameters )
     /**
      * Se utilizara un display de 2 filas, de 16 x 96. Con cada fila de 8x96
     */
+
+    #ifdef STACK_CALCULATION
+        UBaseType_t uxHighWaterMark;
+        uxHighWaterMark = uxTaskGetStackHighWaterMark( NULL );
+        char *buf = pvPortMalloc(10*sizeof(char));
+    #endif
+
     uint8_t graph[192] = {0};
     uint8_t temp = 0; 
     /*Clear the OLED Display*/
@@ -74,12 +111,30 @@ void xTaskDisplay( void *pvParameters )
         OSRAMImageDraw(graph, 15, 0, 96, 2);
         OSRAMStringDraw(itoa(temp,10), 84, 2);
         OSRAMStringDraw("t", 10, 1);
+
+        #ifdef STACK_CALCULATION
+            uxHighWaterMark = uxTaskGetStackHighWaterMark( NULL );
+            print("Display: ");
+            print(ltoc(uxHighWaterMark,buf,10));
+            print("\n");
+        #endif
     }
+
+    #ifdef STACK_CALCULATION
+        vPortFree(buf);
+    #endif
+
     vTaskDelete( NULL );
 }
 
 void xTaskTop( void *pvParameters )
 {
+    #ifdef STACK_CALCULATION
+        UBaseType_t uxHighWaterMark;
+        uxHighWaterMark = uxTaskGetStackHighWaterMark( NULL );
+        char *buf = pvPortMalloc(10*sizeof(char));
+    #endif
+
     size_t size = 400;
     char *data = pvPortMalloc(size);  // Variable que almacena la data para enviar 
 
@@ -92,9 +147,21 @@ void xTaskTop( void *pvParameters )
         getRunTimeStats(data);
         print(data);
 
+        #ifdef STACK_CALCULATION
+            uxHighWaterMark = uxTaskGetStackHighWaterMark( NULL );
+            print("Top: ");
+            print(ltoc(uxHighWaterMark,buf,10));
+            print("\n");
+        #endif
+
         vTaskDelay(pdMS_TO_TICKS(1000));
     }
     vPortFree(data);
+
+    #ifdef STACK_CALCULATION
+        vPortFree(buf);
+    #endif
+
     vTaskDelete( NULL );
 }
 

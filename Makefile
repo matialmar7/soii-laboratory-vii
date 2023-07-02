@@ -56,13 +56,18 @@ INIT_OBJS= ${COMPILER}/startup.o
 
 LIBS= hw_include/libdriver.a
 
-
 #
 # The default rule, which causes init to be built.
 #
 all: ${COMPILER}           \
      ${COMPILER}/TP7.axf \
 	 
+#
+# Rule for make with stack calculation.
+#
+all_stack: all
+all_stack: CFLAGS += -D STACK_CALCULATION	 
+
 #
 # The rule to clean out all the build products
 #

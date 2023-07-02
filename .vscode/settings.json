@@ -10,6 +10,8 @@
         "common.h": "c",
         "hw_adc.h": "c",
         "rand.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "type_traits": "c",
+        "mytasks.h": "c"
     }
 }
