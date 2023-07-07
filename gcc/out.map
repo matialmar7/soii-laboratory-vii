@@ -625,50 +625,50 @@ OUTPUT(gcc/TP7.axf elf32-littlearm)
  .debug_line    0x0000000000002d47      0x120 /usr/lib/gcc/arm-none-eabi/7.3.1/../../../arm-none-eabi/lib/thumb/libc.a(lib_a-strcpy.o)
  .debug_line    0x0000000000002e67      0x143 /usr/lib/gcc/arm-none-eabi/7.3.1/../../../arm-none-eabi/lib/thumb/libc.a(lib_a-strlen-stub.o)
 
-.debug_str      0x0000000000000000     0x29bf
- .debug_str     0x0000000000000000       0xf3 gcc/startup.o
-                                        0x112 (size before relaxing)
- .debug_str     0x00000000000000f3       0xd3 gcc/main.o
-                                        0x187 (size before relaxing)
- .debug_str     0x00000000000001c6      0x50e gcc/list.o
-                                        0x675 (size before relaxing)
- .debug_str     0x00000000000006d4      0x5c7 gcc/queue.o
-                                        0xc0d (size before relaxing)
- .debug_str     0x0000000000000c9b      0xaf5 gcc/tasks.o
-                                       0x136b (size before relaxing)
- .debug_str     0x0000000000001790       0xc6 gcc/port.o
-                                        0x316 (size before relaxing)
- .debug_str     0x0000000000001856      0x2b2 gcc/heap_4.o
-                                        0x864 (size before relaxing)
- .debug_str     0x0000000000001b08      0x21d gcc/BlockQ.o
-                                        0x814 (size before relaxing)
- .debug_str     0x0000000000001d25       0xc7 gcc/PollQ.o
-                                        0x731 (size before relaxing)
- .debug_str     0x0000000000001dec       0x9d gcc/integer.o
-                                        0x636 (size before relaxing)
- .debug_str     0x0000000000001e89      0x160 gcc/semtest.o
-                                        0x7b6 (size before relaxing)
- .debug_str     0x0000000000001fe9      0x1a3 gcc/osram96x16.o
-                                        0x258 (size before relaxing)
- .debug_str     0x000000000000218c       0x3a gcc/rand.o
-                                        0x148 (size before relaxing)
- .debug_str     0x00000000000021c6       0xe1 gcc/mytasks.o
-                                        0x32a (size before relaxing)
- .debug_str     0x00000000000022a7       0xec gcc/stats.o
-                                        0x830 (size before relaxing)
- .debug_str     0x0000000000002393      0x14e gcc/config.o
-                                        0x37b (size before relaxing)
- .debug_str     0x00000000000024e1      0x382 /usr/lib/gcc/arm-none-eabi/7.3.1/../../../arm-none-eabi/lib/thumb/libc.a(lib_a-memcpy-stub.o)
+.debug_str      0x0000000000000000     0x29c3
+ .debug_str     0x0000000000000000       0xf7 gcc/startup.o
+                                        0x116 (size before relaxing)
+ .debug_str     0x00000000000000f7       0xd3 gcc/main.o
+                                        0x18b (size before relaxing)
+ .debug_str     0x00000000000001ca      0x50e gcc/list.o
+                                        0x679 (size before relaxing)
+ .debug_str     0x00000000000006d8      0x5c7 gcc/queue.o
+                                        0xc11 (size before relaxing)
+ .debug_str     0x0000000000000c9f      0xaf5 gcc/tasks.o
+                                       0x136f (size before relaxing)
+ .debug_str     0x0000000000001794       0xc6 gcc/port.o
+                                        0x31a (size before relaxing)
+ .debug_str     0x000000000000185a      0x2b2 gcc/heap_4.o
+                                        0x868 (size before relaxing)
+ .debug_str     0x0000000000001b0c      0x21d gcc/BlockQ.o
+                                        0x818 (size before relaxing)
+ .debug_str     0x0000000000001d29       0xc7 gcc/PollQ.o
+                                        0x735 (size before relaxing)
+ .debug_str     0x0000000000001df0       0x9d gcc/integer.o
+                                        0x63a (size before relaxing)
+ .debug_str     0x0000000000001e8d      0x160 gcc/semtest.o
+                                        0x7ba (size before relaxing)
+ .debug_str     0x0000000000001fed      0x1a3 gcc/osram96x16.o
+                                        0x25c (size before relaxing)
+ .debug_str     0x0000000000002190       0x3a gcc/rand.o
+                                        0x14c (size before relaxing)
+ .debug_str     0x00000000000021ca       0xe1 gcc/mytasks.o
+                                        0x32e (size before relaxing)
+ .debug_str     0x00000000000022ab       0xec gcc/stats.o
+                                        0x834 (size before relaxing)
+ .debug_str     0x0000000000002397      0x14e gcc/config.o
+                                        0x37f (size before relaxing)
+ .debug_str     0x00000000000024e5      0x382 /usr/lib/gcc/arm-none-eabi/7.3.1/../../../arm-none-eabi/lib/thumb/libc.a(lib_a-memcpy-stub.o)
                                         0x8ae (size before relaxing)
- .debug_str     0x0000000000002863       0x7e /usr/lib/gcc/arm-none-eabi/7.3.1/../../../arm-none-eabi/lib/thumb/libc.a(lib_a-memset.o)
+ .debug_str     0x0000000000002867       0x7e /usr/lib/gcc/arm-none-eabi/7.3.1/../../../arm-none-eabi/lib/thumb/libc.a(lib_a-memset.o)
                                         0x889 (size before relaxing)
- .debug_str     0x00000000000028e1       0x2e /usr/lib/gcc/arm-none-eabi/7.3.1/../../../arm-none-eabi/lib/thumb/libc.a(lib_a-stpcpy.o)
+ .debug_str     0x00000000000028e5       0x2e /usr/lib/gcc/arm-none-eabi/7.3.1/../../../arm-none-eabi/lib/thumb/libc.a(lib_a-stpcpy.o)
                                         0x571 (size before relaxing)
- .debug_str     0x000000000000290f       0x39 /usr/lib/gcc/arm-none-eabi/7.3.1/../../../arm-none-eabi/lib/thumb/libc.a(lib_a-strcat.o)
+ .debug_str     0x0000000000002913       0x39 /usr/lib/gcc/arm-none-eabi/7.3.1/../../../arm-none-eabi/lib/thumb/libc.a(lib_a-strcat.o)
                                         0x56b (size before relaxing)
- .debug_str     0x0000000000002948       0x36 /usr/lib/gcc/arm-none-eabi/7.3.1/../../../arm-none-eabi/lib/thumb/libc.a(lib_a-strcpy.o)
+ .debug_str     0x000000000000294c       0x36 /usr/lib/gcc/arm-none-eabi/7.3.1/../../../arm-none-eabi/lib/thumb/libc.a(lib_a-strcpy.o)
                                         0x566 (size before relaxing)
- .debug_str     0x000000000000297e       0x41 /usr/lib/gcc/arm-none-eabi/7.3.1/../../../arm-none-eabi/lib/thumb/libc.a(lib_a-strlen-stub.o)
+ .debug_str     0x0000000000002982       0x41 /usr/lib/gcc/arm-none-eabi/7.3.1/../../../arm-none-eabi/lib/thumb/libc.a(lib_a-strlen-stub.o)
                                         0x585 (size before relaxing)
 
 .comment        0x0000000000000000      0x488
